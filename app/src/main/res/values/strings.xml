@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">JustJava</string>
     <string name="quantity">quantity</string>
-    <string name="number">0</string>
+    <string name="number">2</string>
     <string name="order">ORDER</string>
     <string name="price">price</string>
     <string name="value">$0</string>
+    <string name="decrement">-</string>
+    <string name="increment">+</string>
 </resources>
