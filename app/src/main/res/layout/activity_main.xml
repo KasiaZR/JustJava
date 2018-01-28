@@ -18,28 +18,37 @@
         android:layout_marginBottom="16dp"
         android:textAllCaps="true"/>
 
-    <Button
-        android:id="@+id/increment"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:text="@string/increment"
-        android:onClick="increment"/>
-
-    <TextView
-        android:id="@+id/quantity_text_view"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/number"
-        android:textSize="16sp"
-        android:textColor="#000000" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/decrement"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/decrement"
-        android:onClick="decrement"/>
+        <Button
+            android:id="@+id/decrement"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="@string/decrement"
+            android:onClick="decrement"/>
+
+        <TextView
+            android:id="@+id/quantity_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/number"
+            android:textSize="16sp"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/increment"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="@string/increment"
+            android:onClick="increment"/>
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/price"
@@ -65,8 +74,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/order"
         android:onClick="submitOrder"/>
-
-
 
 </LinearLayout>
 
