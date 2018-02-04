@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">JustJava</string>
     <string name="quantity">quantity</string>
     <string name="number">0</string>
@@ -7,4 +7,5 @@
     <string name="value">$0</string>
     <string name="decrement">-</string>
     <string name="increment">+</string>
+    <string name="order_summary_email_subject">Just Java order for <xliff:g id="name" example="Amy">%s</xliff:g></string>
 </resources>

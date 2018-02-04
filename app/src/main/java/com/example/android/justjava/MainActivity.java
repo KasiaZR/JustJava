@@ -1,15 +1,15 @@
 package com.example.android.justjava;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.text.NumberFormat;
+import android.widget.Toast;
 
 /**
  * This app displays an order form to order coffee.
@@ -17,7 +17,6 @@ import java.text.NumberFormat;
 public class MainActivity extends AppCompatActivity {
 
     int quantity = 2;
-    int price = quantity * 5;
 
 
     @Override
@@ -30,14 +29,31 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the plus button is clicked.
      */
     public void increment(View view) {
+        if (quantity == 100) {
+            return;
+        }
         quantity = quantity + 1;
-        display(quantity);
+        displayQuantity(quantity);
+
     }
 
     /**
      * This method is called when the minus button is clicked.
      */
     public void decrement(View view) {
+        if (quantity == 0) {
+
+            //Add simple toast when someone try to order cofee below above value
+            Context context = getApplicationContext();
+            CharSequence text = "You cannot order less than none coffee.";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+
+            return;
+        }
+
         quantity = quantity - 1;
         display(quantity);
     }
@@ -47,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void submitOrder(View view) {
 
+        //Get user's name
         EditText customerNameText = (EditText) findViewById(R.id.customer_name);
-        String customerName= customerNameText.getText().toString();
+        String customerName = customerNameText.getText().toString();
 
         // Figure out if the user wants whipped cream topping
         CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
@@ -58,14 +75,49 @@ public class MainActivity extends AppCompatActivity {
         CheckBox chocolateCheckBox = (CheckBox) findViewById(R.id.chocolate_checkbox);
         boolean hasChocolate = chocolateCheckBox.isChecked();
 
-        int price = calculatePrice();
-        String priceMessage = createOrderSummary(price, hasWhippedCream, hasChocolate, customerName);
-        displayMessage(priceMessage);
+        //Calculate the price
+        int price = calculatePrice(hasWhippedCream, hasChocolate);
 
+        //display summary on the screem
+        String priceMessage = createOrderSummary(price, hasWhippedCream, hasChocolate, customerName);
+
+        //add new intent - open gmail
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_SUBJECT,
+                getString(R.string.order_summary_email_subject, customerName));
+        intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Calculates the price of the order
+     */
+    private int calculatePrice(boolean addWhippedCream, boolean addChocolate) {
+        //price of one cup of coffee
+        int basePrice = 5;
+
+        //Add  whipped cream for 1 dolar per cup
+        if (addWhippedCream) {
+            basePrice = basePrice + 1;
+        }
+
+        // chocolate for 2 dolars per cup
+        if (addChocolate) {
+            basePrice = basePrice + 2;
+        }
+
+        //total price
+        return quantity * basePrice;
     }
 
     /**
      * Create summary of the order
+     *
      * @param price of the order
      * @return text summary
      */
@@ -88,17 +140,9 @@ public class MainActivity extends AppCompatActivity {
         quantityTextView.setText("" + number);
     }
 
-    /**
-     * Calculates the price of the order
-     */
-    private int calculatePrice(){
-        price = quantity * 5;
-        return price;
-    }
 
     /**
      * *This metod display the given quantity value on the screen
-     *
      */
 
     private void displayQuantity(int numberOfCoffees) {
@@ -106,15 +150,6 @@ public class MainActivity extends AppCompatActivity {
                 R.id.quantity_text_view);
         quantityTextView.setText("" + numberOfCoffees);
 
-    }
-
-
-   /**
-     * This method displays the given text on the screen.
-     */
-    private void displayMessage(String message) {
-       TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
-        orderSummaryTextView.setText(message);
     }
 
 
